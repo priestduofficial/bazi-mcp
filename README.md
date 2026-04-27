@@ -554,10 +554,11 @@ Example response:
 ### Get Chinese calendar information
 
 ```bash
-curl "http://localhost:3000/api/calendar/chinese?solarDatetime=2025-05-07T12:00:00+08:00"
+curl "http://localhost:3000/api/calendar/chinese?solarDatetime=2025-05-07T12:00:00%2B08:00"
 ```
 
 If `solarDatetime` is omitted, the current date is used.
+When using a timezone offset in a URL query string, encode `+` as `%2B`, for example `%2B08:00`.
 
 Example response:
 
