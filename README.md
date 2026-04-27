@@ -453,3 +453,129 @@ npx -y @smithery/cli install @cantian-ai/bazi-mcp --client claude
 ```
 
 **Keywords**: Bazi MCP, Bazi AI Agent, Fengshui AI Agent, Bazi Calculator MCP, Bazi Calculator AI, Cantian AI
+
+## Website JSON API Usage
+
+This server also exposes website-friendly JSON API endpoints while preserving the existing MCP endpoint at `POST /mcp`.
+
+### Start the server
+
+```bash
+npm install
+npm start
+```
+
+By default, the server runs on:
+
+```text
+http://localhost:3000
+```
+
+### Health check
+
+```bash
+curl http://localhost:3000/health
+```
+
+Example response:
+
+```json
+{
+  "ok": true,
+  "service": "bazi-mcp-api",
+  "version": "0.1.0"
+}
+```
+
+### Get BaZi detail
+
+```bash
+curl -X POST http://localhost:3000/api/bazi/detail \
+  -H "Content-Type: application/json" \
+  -d '{
+    "solarDatetime": "1998-07-31T14:10:00+08:00",
+    "gender": 1,
+    "eightCharProviderSect": 2
+  }'
+```
+
+You may also use `lunarDatetime` instead of `solarDatetime`.
+
+Rules:
+
+- Provide one and only one of `solarDatetime` or `lunarDatetime`.
+- `gender` is optional and defaults to `1`.
+- `eightCharProviderSect` is optional and defaults to `2`.
+
+Example success response:
+
+```json
+{
+  "ok": true,
+  "data": {
+    "...": "BaZi detail result"
+  }
+}
+```
+
+Example validation error response:
+
+```json
+{
+  "ok": false,
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Provide one and only one of solarDatetime or lunarDatetime."
+  }
+}
+```
+
+### Get possible solar times from BaZi
+
+```bash
+curl -X POST http://localhost:3000/api/bazi/solar-times \
+  -H "Content-Type: application/json" \
+  -d '{
+    "bazi": "戊寅 己未 己卯 辛未"
+  }'
+```
+
+Example response:
+
+```json
+{
+  "ok": true,
+  "data": [
+    "1998-07-31 14:00:00"
+  ]
+}
+```
+
+### Get Chinese calendar information
+
+```bash
+curl "http://localhost:3000/api/calendar/chinese?solarDatetime=2025-05-07T12:00:00+08:00"
+```
+
+If `solarDatetime` is omitted, the current date is used.
+
+Example response:
+
+```json
+{
+  "ok": true,
+  "data": {
+    "...": "Chinese calendar result"
+  }
+}
+```
+
+### Existing MCP endpoint
+
+The existing MCP Streamable HTTP endpoint is preserved:
+
+```text
+POST /mcp
+```
+
+This means MCP clients can continue using the original MCP server behavior, while websites can call the new JSON API endpoints directly.
