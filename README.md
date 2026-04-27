@@ -571,6 +571,64 @@ Example response:
 }
 ```
 
+## Frontend Demo
+
+A simple static HTML frontend is provided to test the API endpoints using **Birthplace Local Civil Time Mode**.
+
+### What is Birthplace Local Civil Time Mode?
+
+The frontend demo uses Birthplace Local Civil Time Mode with Local Civil Time +08:00 as the default timezone offset. Users should enter the birth date and birth time exactly as officially recorded in the birthplace.
+
+**Important**: The frontend does not convert the entered time to UTC, browser local time, true solar time, or any other timezone. The exact clock time you enter is preserved, and the +08:00 offset is attached for API compatibility only.
+
+### Simplified Demo Form
+
+For this demo phase, the form has been simplified:
+
+- **Birthplace Timezone**: Fixed to Local Civil Time +08:00 (no selection needed)
+- **Birth Date & Time input**: Enter the date and time exactly as officially recorded in the birthplace
+- **Gender selector**: Choose between Male (男) = 1 or Female (女) = 0
+- **Eight Char Provider Sect**: Hidden in this demo, submitted internally as value 2
+
+### Example
+
+If you have a birth record from a +08:00 timezone:
+- Recorded birth time: **2026-11-19 11:33**
+- Demo timezone: **+08:00** (fixed)
+
+The frontend sends to the API:
+```
+2026-11-19T11:33:00+08:00
+```
+
+The hour and minute **remain 11:33** exactly as recorded. They are not shifted, converted, or recalculated based on your current location or browser timezone.
+
+### Note on Solar Time and Longitude
+
+True solar time correction and longitude-based adjustments are intentionally not implemented in this demo phase. The system uses the officially recorded civil time as provided by the user.
+
+### Access the demo
+
+1. Start the server:
+   ```bash
+   npm start
+   ```
+
+2. Open your browser and navigate to:
+   ```
+   http://localhost:3000
+   ```
+
+The demo page includes:
+- **Birth Date & Time input**: Enter the date and time exactly as officially recorded in the birthplace
+- **Birthplace Timezone**: Displays Local Civil Time +08:00 (fixed for this demo)
+- **Gender selector**: Choose Male (男) or Female (女)
+- **Submit button**: Call the POST `/api/bazi/detail` endpoint
+- **Submitted solarDatetime display**: See the exact ISO string sent to the API
+- **Result display**: Shows formatted JSON response or error messages
+
+Simply fill in the form with the birth information and click Submit to test the API. The response will be displayed in the result area below, showing the exact solarDatetime that was submitted.
+
 ### Existing MCP endpoint
 
 The existing MCP Streamable HTTP endpoint is preserved:
